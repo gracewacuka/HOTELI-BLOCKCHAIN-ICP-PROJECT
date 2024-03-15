@@ -1,0 +1,156 @@
+mod hotel;
+
+use std::io;
+
+fn main() {
+    let mut hotel = hotel::Hotel::new();
+
+    loop {
+        println!("Welcome to the Hotel Management System");
+        println!("1. Check-in");
+        println!("2. Check-out");
+        println!("3. View guest list");
+        println!("4. Exit");
+        println!("Please enter your choice:");
+
+        let mut choice = String::new();
+        io::stdin().read_line(&mut choice).expect("Failed to read line");
+        let choice: u32 = match choice.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input. Please enter a number.");
+                continue;
+            }
+        };
+
+        match choice {
+            1 => {
+                println!("Enter guest name:");
+                let mut name = String::new();
+                io::stdin().read_line(&mut name).expect("Failed to read line");
+                hotel.check_in(name.trim().to_string());
+            }
+            2 => {
+                println!("Enter guest name to check out:");
+                let mut name = String::new();
+                io::stdin().read_line(&mut name).expect("Failed to read line");
+                hotel.check_out(name.trim());
+            }
+            3 => {
+                println!("Guest List:");
+                for guest in hotel.get_guests() {
+                    println!("{}", guest);
+                }
+            }
+            4 => {
+                println!("Exiting...");
+                break;
+            }
+            _ => println!("Invalid choice. Please select a valid option."),
+        }
+    }
+}
+
+pub struct Hotel {
+    guests: Vec<String>,
+}
+
+impl Hotel {
+    pub fn new() -> Hotel {
+        Hotel { guests: Vec::new() }
+    }
+
+    pub fn check_in(&mut self, guest: String) {
+        self.guests.push(guest);
+        println!("Guest {} checked in successfully.", self.guests.last().unwrap());
+    }
+
+    pub fn check_out(&mut self, guest: &str) {
+        if let Some(index) = self.guests.iter().position(|x| x == guest) {
+            self.guests.remove(index);
+            println!("Guest {} checked out successfully.", guest);
+        } else {
+            println!("Guest {} not found.", guest);
+        }
+    }
+
+    pub fn get_guests(&self) -> &Vec<String> {
+        &self.guests
+    }
+}
+
+#include <iostream>
+    #include <vector>
+    #include <algorithm>
+    
+    class Hotel {
+    private:
+        std::vector<std::string> guests;
+    
+    public:
+        void checkIn(const std::string& guest) {
+            guests.push_back(guest);
+            std::cout << "Guest " << guest << " checked in successfully." << std::endl;
+        }
+    
+        void checkOut(const std::string& guest) {
+            auto it = std::find(guests.begin(), guests.end(), guest);
+            if (it != guests.end()) {
+                guests.erase(it);
+                std::cout << "Guest " << guest << " checked out successfully." << std::endl;
+            } else {
+                std::cout << "Guest " << guest << " not found." << std::endl;
+            }
+        }
+    
+        void displayGuests() {
+            std::cout << "Guest List:" << std::endl;
+            for (const auto& guest : guests) {
+                std::cout << guest << std::endl;
+            }
+        }
+    };
+    
+    int main() {
+        Hotel hotel;
+    
+        while (true) {
+            std::cout << "Welcome to the Hotel Management System" << std::endl;
+            std::cout << "1. Check-in" << std::endl;
+            std::cout << "2. Check-out" << std::endl;
+            std::cout << "3. View guest list" << std::endl;
+            std::cout << "4. Exit" << std::endl;
+            std::cout << "Please enter your choice:" << std::endl;
+    
+            int choice;
+            std::cin >> choice;
+    
+            switch (choice) {
+                case 1: {
+                    std::cout << "Enter guest name: ";
+                    std::string name;
+                    std::cin >> name;
+                    hotel.checkIn(name);
+                    break;
+                }
+                case 2: {
+                    std::cout << "Enter guest name to check out: ";
+                    std::string name;
+                    std::cin >> name;
+                    hotel.checkOut(name);
+                    break;
+                }
+                case 3:
+                    hotel.displayGuests();
+                    break;
+                case 4:
+                    std::cout << "Exiting..." << std::endl;
+                    return 0;
+                default:
+                    std::cout << "Invalid choice. Please select a valid option." << std::endl;
+            }
+        }
+    
+        return 0;
+    }
+    
